@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:idara_plus/features/finances/screens/imposable_page.dart';
+import 'package:idara_plus/features/declarations/screens/fiscal_declarations_page.dart';
 
 class RecetteFinancesPage extends StatelessWidget {
   const RecetteFinancesPage({super.key});
@@ -43,8 +44,20 @@ class RecetteFinancesPage extends StatelessWidget {
                   );
                 },
               ),
-              // Ici, pas besoin de mettre onTap, il sera null par défaut
-              _buildServiceOption("Déclarations fiscales"),
+
+              // NAVIGATION AJOUTÉE ICI
+              _buildServiceOption(
+                "Déclarations fiscales",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const FiscalDeclarationsPage(),
+                    ),
+                  );
+                },
+              ),
+
               _buildServiceOption("La quittance d'impôt"),
 
               const Spacer(),
@@ -59,7 +72,6 @@ class RecetteFinancesPage extends StatelessWidget {
     );
   }
 
-  // CORRECTION : le VoidCallback? est optionnel
   Widget _buildServiceOption(String title, {VoidCallback? onTap}) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -90,7 +102,6 @@ class RecetteFinancesPage extends StatelessWidget {
           size: 16,
           color: Color(0xFF0091D5),
         ),
-        // Si onTap est null, le bouton ne fait rien (ce qui est correct pour les menus non finis)
         onTap: onTap,
       ),
     );
