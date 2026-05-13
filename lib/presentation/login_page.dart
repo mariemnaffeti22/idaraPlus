@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'signup_screen.dart';
-import 'package:idara_plus/administration_page.dart';
+import 'package:idara_plus/presentation/administration_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:idara_plus/presentation/municipalite_form_page.dart'
+    show MunicipaliteFormPage;
+import 'package:idara_plus/features/municipalities/screens/extrait_naissance_page.dart'; // ← AJOUTÉ
 import 'poste_page.dart';
 
 class AdministrationPage extends StatefulWidget {
@@ -9,12 +12,11 @@ class AdministrationPage extends StatefulWidget {
 }
 
 class _AdministrationPageState extends State<AdministrationPage> {
-  int _selectedIndex = 2; // "Accueil" is the 3rd item (index 2)
+  int _selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Gradient Background
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -40,8 +42,6 @@ class _AdministrationPageState extends State<AdministrationPage> {
                 ),
               ),
               const SizedBox(height: 30),
-
-              // The Grid of Cards
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -49,19 +49,26 @@ class _AdministrationPageState extends State<AdministrationPage> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
-                    childAspectRatio: 0.82, // Adjust card height/width ratio
+                    childAspectRatio: 0.82,
                     children: [
                       _buildAdminCard(
                         title: "Municipalities",
-                        image: 'assets/messages.png', // input_file_9
+                        image: 'assets/messages.png',
                         isBlue: true,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MunicipalitePage(),
+                            ),
+                          );
+                        },
                       ),
                       _buildAdminCard(
                         title: "Poste",
                         image: 'assets/mailbox.png',
                         isBlue: false,
                         onTap: () {
-                          // This will work now!
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -72,12 +79,12 @@ class _AdministrationPageState extends State<AdministrationPage> {
                       ),
                       _buildAdminCard(
                         title: "Recette\ndes finances",
-                        image: 'assets/Wallet.png', // input_file_7
+                        image: 'assets/Wallet.png',
                         isBlue: false,
                       ),
                       _buildAdminCard(
                         title: "Poste\nde police",
-                        image: 'assets/handshake.png', // input_file_6
+                        image: 'assets/handshake.png',
                         isBlue: false,
                       ),
                     ],
@@ -88,8 +95,6 @@ class _AdministrationPageState extends State<AdministrationPage> {
           ),
         ),
       ),
-
-      // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() => _selectedIndex = index),
@@ -146,16 +151,13 @@ class _AdministrationPageState extends State<AdministrationPage> {
     );
   }
 
-  // Helper widget to build the individual cards
-  // Update your helper function to look like this:
   Widget _buildAdminCard({
     required String title,
     required String image,
     required bool isBlue,
-    VoidCallback? onTap, // 1. Add this line
+    VoidCallback? onTap,
   }) {
     return GestureDetector(
-      // 2. Wrap everything in a GestureDetector
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
@@ -163,7 +165,7 @@ class _AdministrationPageState extends State<AdministrationPage> {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.15),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -189,6 +191,86 @@ class _AdministrationPageState extends State<AdministrationPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+// MunicipalitePage
+class MunicipalitePage extends StatelessWidget {
+  const MunicipalitePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Municipalité"),
+        backgroundColor: const Color(0xFF003D5B),
+        foregroundColor: Colors.white,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 20),
+            const Text(
+              "Choisissez votre service :",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 30),
+            _buildServiceButton(
+              context,
+              label: "Légalisation",
+              icon: Icons.verified_outlined,
+            ),
+            const SizedBox(height: 16),
+            _buildServiceButton(
+              context,
+              label: "Copie conforme",
+              icon: Icons.content_copy_outlined,
+            ),
+            const SizedBox(height: 16),
+            _buildServiceButton(
+              context,
+              label: "Extrait de naissance",
+              icon: Icons.description_outlined,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildServiceButton(
+    BuildContext context, {
+    required String label,
+    required IconData icon,
+  }) {
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF0091D5),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      icon: Icon(icon, size: 24),
+      label: Text(label, style: const TextStyle(fontSize: 17)),
+      onPressed: () {
+        // ← CORRECTION ICI
+        if (label == "Extrait de naissance") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ExtraitNaissancePage()),
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => MunicipaliteFormPage(serviceType: label),
+            ),
+          );
+        }
+      },
     );
   }
 }

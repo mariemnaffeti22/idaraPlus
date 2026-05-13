@@ -19,8 +19,9 @@ class _SignupPageOneState extends State<SignupPageOne> {
       firstDate: DateTime(1950),
       lastDate: DateTime.now(),
     );
-    if (picked != null)
+    if (picked != null) {
       setState(() => _dateCtrl.text = DateFormat('yyyy-MM-dd').format(picked));
+    }
   }
 
   @override

@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import '../features/municipalities/screens/service_details_page.dart';
+import '../features/transfers/screens/transferts_page.dart';
+import '../features/payments/screens/payments_cards_page.dart';
+// Vérifie que tu n'as qu'une seule ligne pour ColisPage ici
+import '../features/parcels/screens/colis_page.dart';
+import '../features/philately/screens/philatelie_page.dart';
 
 class PostePage extends StatefulWidget {
   const PostePage({super.key});
@@ -8,7 +14,7 @@ class PostePage extends StatefulWidget {
 }
 
 class _PostePageState extends State<PostePage> {
-  int _selectedIndex = 2; // "Accueil" is active
+  int _selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,6 @@ class _PostePageState extends State<PostePage> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              // Back Button and Title
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
@@ -50,14 +55,11 @@ class _PostePageState extends State<PostePage> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48), // Balancing the back button
+                    const SizedBox(width: 48),
                   ],
                 ),
               ),
-
               const SizedBox(height: 20),
-
-              // Menu Options
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -68,12 +70,8 @@ class _PostePageState extends State<PostePage> {
                       _buildMenuCard("Paiements et Cartes"),
                       _buildMenuCard("Colis Postaux"),
                       _buildMenuCard("Philatélie"),
-
                       const SizedBox(height: 30),
-
-                      // Information Box
                       _buildInfoBox(),
-
                       const SizedBox(height: 20),
                     ],
                   ),
@@ -87,35 +85,66 @@ class _PostePageState extends State<PostePage> {
     );
   }
 
-  // Card Builder
   Widget _buildMenuCard(String title) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 15),
-      padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.lightBlue.withOpacity(0.15),
+            color: Colors.lightBlue.withValues(alpha: 0.15), // CORRIGÉ ICI
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
-          color: Colors.black87,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            Widget destinationPage;
+            switch (title) {
+              case "Philatélie":
+                destinationPage = const PhilateliePage();
+                break;
+              case "Colis Postaux":
+                destinationPage = const ColisPage();
+                break;
+              case "Transferts d'argent":
+                destinationPage = const TransfertsPage();
+                break;
+              case "Paiements et Cartes":
+                destinationPage = const PaymentsCardsPage();
+                break;
+              default:
+                destinationPage = ServiceDetailsPage(
+                  serviceName: title,
+                ); // PAS DE CONST ICI
+            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => destinationPage),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
 
-  // Information Practical Box
   Widget _buildInfoBox() {
     return Stack(
       clipBehavior: Clip.none,
@@ -123,12 +152,12 @@ class _PostePageState extends State<PostePage> {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFF003D5B), // Dark blue
+            color: const Color(0xFF003D5B),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Column(
+          child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
                 "Informations Pratiques :",
                 style: TextStyle(
@@ -154,21 +183,13 @@ class _PostePageState extends State<PostePage> {
             ],
           ),
         ),
-        // Floating Exclamation Icon
-        Positioned(
+        const Positioned(
           bottom: -15,
           right: -10,
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-              color: Color(0xFF003D5B),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.priority_high,
-              color: Colors.white,
-              size: 28,
-            ),
+          child: CircleAvatar(
+            backgroundColor: Color(0xFF003D5B),
+            radius: 24,
+            child: Icon(Icons.priority_high, color: Colors.white, size: 28),
           ),
         ),
       ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:idara_plus/administration_page.dart';
+import 'package:idara_plus/presentation/administration_page.dart';
 
 class SignupPageTwo extends StatefulWidget {
   const SignupPageTwo({super.key});
