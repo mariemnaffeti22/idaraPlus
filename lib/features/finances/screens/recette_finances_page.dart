@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:idara_plus/features/finances/screens/imposable_page.dart';
 import 'package:idara_plus/features/declarations/screens/fiscal_declarations_page.dart';
+// 1. AJOUT DE L'IMPORT DE LA PAGE QUITTANCE
+import 'package:idara_plus/features/finances/screens/quittance_main_page.dart'; 
 
 class RecetteFinancesPage extends StatelessWidget {
   const RecetteFinancesPage({super.key});
@@ -18,7 +20,7 @@ class RecetteFinancesPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
-            children: [
+            children:[
               const SizedBox(height: 20),
               const Text(
                 "Recette\ndes finances",
@@ -45,7 +47,6 @@ class RecetteFinancesPage extends StatelessWidget {
                 },
               ),
 
-              // NAVIGATION AJOUTÉE ICI
               _buildServiceOption(
                 "Déclarations fiscales",
                 onTap: () {
@@ -58,7 +59,18 @@ class RecetteFinancesPage extends StatelessWidget {
                 },
               ),
 
-              _buildServiceOption("La quittance d'impôt"),
+              // 2. NAVIGATION AJOUTÉE POUR LA QUITTANCE
+              _buildServiceOption(
+                "La quittance d'impôt",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const QuittanceMainPage(),
+                    ),
+                  );
+                },
+              ),
 
               const Spacer(),
 
@@ -79,7 +91,7 @@ class RecetteFinancesPage extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: const Color(0xFF0091D5).withOpacity(0.3)),
-        boxShadow: [
+        boxShadow:[
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 10,
@@ -110,7 +122,7 @@ class RecetteFinancesPage extends StatelessWidget {
   Widget _buildInfoPratiqueCard() {
     return Stack(
       clipBehavior: Clip.none,
-      children: [
+      children:[
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
@@ -120,7 +132,7 @@ class RecetteFinancesPage extends StatelessWidget {
           ),
           child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children:[
               Text(
                 "Informations Pratiques :",
                 style: TextStyle(
