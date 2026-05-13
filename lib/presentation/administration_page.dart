@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:idara_plus/presentation/municipalite_form_page.dart'
     show MunicipaliteFormPage;
-import 'package:idara_plus/features/municipalities/screens/extrait_naissance_page.dart'; // ← AJOUTÉ
+import 'package:idara_plus/features/municipalities/screens/extrait_naissance_page.dart';
 import 'poste_page.dart';
+import 'package:idara_plus/features/finances/screens/recette_finances_page.dart';
 
 class AdministrationPage extends StatefulWidget {
   const AdministrationPage({super.key});
@@ -42,6 +43,7 @@ class _AdministrationPageState extends State<AdministrationPage> {
                 ),
               ),
               const SizedBox(height: 30),
+              // CORRECTION ICI : Ajout du "child:" manquant avant le GridView
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -81,11 +83,22 @@ class _AdministrationPageState extends State<AdministrationPage> {
                         title: "Recette\ndes finances",
                         image: 'assets/Wallet.png',
                         isBlue: false,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RecetteFinancesPage(),
+                            ),
+                          );
+                        },
                       ),
                       _buildAdminCard(
                         title: "Poste\nde police",
                         image: 'assets/handshake.png',
                         isBlue: false,
+                        onTap: () {
+                          // Navigation à ajouter plus tard
+                        },
                       ),
                     ],
                   ),
@@ -107,42 +120,24 @@ class _AdministrationPageState extends State<AdministrationPage> {
           fontSize: 12,
         ),
         unselectedLabelStyle: const TextStyle(fontSize: 12),
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
             icon: Icon(Icons.layers_outlined),
             label: "Démarches",
           ),
           BottomNavigationBarItem(
-            icon: Stack(
-              children: [
-                const Icon(Icons.account_balance_outlined),
-                Positioned(
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(1),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 8,
-                      minHeight: 8,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            icon: Icon(Icons.account_balance_outlined),
             label: "Suivi",
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             label: "Accueil",
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble_outline),
             label: "Chat IA",
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             label: "Profil",
           ),
@@ -165,7 +160,7 @@ class _AdministrationPageState extends State<AdministrationPage> {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.15),
+              color: Colors.black.withOpacity(0.15),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
