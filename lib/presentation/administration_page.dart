@@ -4,6 +4,9 @@ import 'package:idara_plus/presentation/municipalite_form_page.dart'
 import 'package:idara_plus/features/municipalities/screens/extrait_naissance_page.dart';
 import 'poste_page.dart';
 import 'package:idara_plus/features/finances/screens/recette_finances_page.dart';
+import 'package:idara_plus/features/police/screens/poste_police_page.dart';
+// AJOUT DE L'IMPORT POUR LA PAGE SUIVI
+import 'package:idara_plus/features/declarations/screens/suivi_page.dart';
 
 class AdministrationPage extends StatefulWidget {
   const AdministrationPage({super.key});
@@ -13,7 +16,7 @@ class AdministrationPage extends StatefulWidget {
 }
 
 class _AdministrationPageState extends State<AdministrationPage> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 2; // Index de "Accueil"
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,6 @@ class _AdministrationPageState extends State<AdministrationPage> {
                 ),
               ),
               const SizedBox(height: 30),
-              // CORRECTION ICI : Ajout du "child:" manquant avant le GridView
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -97,7 +99,12 @@ class _AdministrationPageState extends State<AdministrationPage> {
                         image: 'assets/handshake.png',
                         isBlue: false,
                         onTap: () {
-                          // Navigation à ajouter plus tard
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PostePolicePage(),
+                            ),
+                          );
                         },
                       ),
                     ],
@@ -110,7 +117,18 @@ class _AdministrationPageState extends State<AdministrationPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
+        // LOGIQUE DE NAVIGATION CORRIGÉE
+        onTap: (index) {
+          if (index == 1) {
+            // Index 1 correspond à "Suivi"
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SuiviPage()),
+            );
+          } else {
+            setState(() => _selectedIndex = index);
+          }
+        },
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
@@ -190,7 +208,7 @@ class _AdministrationPageState extends State<AdministrationPage> {
   }
 }
 
-// MunicipalitePage
+// Classe MunicipalitePage inchangée...
 class MunicipalitePage extends StatelessWidget {
   const MunicipalitePage({super.key});
 
@@ -251,7 +269,6 @@ class MunicipalitePage extends StatelessWidget {
       icon: Icon(icon, size: 24),
       label: Text(label, style: const TextStyle(fontSize: 17)),
       onPressed: () {
-        // ← CORRECTION ICI
         if (label == "Extrait de naissance") {
           Navigator.push(
             context,
