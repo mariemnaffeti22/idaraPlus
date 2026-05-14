@@ -16,7 +16,7 @@ class _ChatIAPageState extends State<ChatIAPage> {
   final List<Map<String, String>> _messages = [];
   bool _isLoading = false;
 
-  static const String _groqApiKey = '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';
+  static const String _groqApiKey = dotenv.env['GROQ_API_KEY'] ;
   static const String _groqUrl = 'https://api.groq.com/openai/v1/chat/completions';
 
   Future<void> _sendMessage() async {

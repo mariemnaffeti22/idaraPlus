@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^1.0.8 
   flutter_native_splash: ^2.4.0
   intl: ^0.20.2
   screenshot: ^3.0.0
@@ -20,6 +20,7 @@ dependencies:
   pdf: ^3.10.0
   http: ^1.2.0  # add this line
   image_picker: ^1.1.2
+  flutter_dotenv: ^6.0.1
 
 dev_dependencies:
   flutter_test:
