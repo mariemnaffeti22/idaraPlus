@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Import crucial
 import 'signup_screen.dart';
 import 'package:idara_plus/presentation/administration_page.dart';
 
@@ -10,8 +11,53 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   bool _obscurePassword = true;
   bool _agreed = false;
+
+  // Fonction appelée au clic sur Sign In
+  Future<void> _handleLogin() async {
+    if (!_agreed) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Veuillez accepter les conditions d'utilisation"),
+        ),
+      );
+      return;
+    }
+
+    if (_emailController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Veuillez entrer votre email ou CIN")),
+      );
+      return;
+    }
+
+    // Sauvegarde des infos de l'utilisateur
+    final prefs = await SharedPreferences.getInstance();
+    String name = _emailController.text.contains('@')
+        ? _emailController.text.split('@')[0]
+        : _emailController.text; // Utilise le CIN si pas d'email
+
+    await prefs.setString('user_name', name);
+    await prefs.setBool('isLoggedIn', true);
+
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AdministrationPage()),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +91,15 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 40),
 
                 _label("Email / CIN"),
-                _input("Enter your email address"),
+                _input(
+                  "Enter your email address",
+                  controller: _emailController,
+                ),
                 const SizedBox(height: 20),
                 _label("Password"),
                 _input(
                   "Enter your password",
+                  controller: _passwordController,
                   isPwd: true,
                   obscure: _obscurePassword,
                   onToggle: () =>
@@ -84,14 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 const SizedBox(height: 40),
-                _primaryButton("Sign in", () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AdministrationPage(),
-                    ),
-                  );
-                }),
+                _primaryButton("Sign in", _handleLogin),
 
                 const SizedBox(height: 40),
                 const Text(
@@ -134,7 +177,9 @@ class _LoginPageState extends State<LoginPage> {
     bool isPwd = false,
     bool obscure = false,
     VoidCallback? onToggle,
+    required TextEditingController controller,
   }) => TextField(
+    controller: controller,
     obscureText: obscure,
     decoration: InputDecoration(
       hintText: h,

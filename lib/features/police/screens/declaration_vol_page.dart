@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:idara_plus/features/police/screens/recu_page.dart';
 
 class DeclarationVolPage extends StatefulWidget {
   const DeclarationVolPage({super.key});
@@ -15,13 +16,17 @@ class _DeclarationVolPageState extends State<DeclarationVolPage> {
 
   // Champs du formulaire
   String _objetVole = "CIN";
-  DateTime _dateVol = DateTime.now();
   final TextEditingController _lieuController = TextEditingController();
 
   Future<void> _submitDeclaration() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('vol_status', 0); // 0 = Reçu
     await prefs.setString('vol_objet', _objetVole);
+    await prefs.setString(
+      'vol_date',
+      DateFormat('dd/MM/yyyy').format(DateTime.now()),
+    );
+
     setState(() => _isSubmitted = true);
   }
 
@@ -99,15 +104,21 @@ class _DeclarationVolPageState extends State<DeclarationVolPage> {
             "Déclaration reçue",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 10),
-          Text(
-            "Vol de $_objetVole enregistré. Votre dossier est en cours d'investigation.",
-            textAlign: TextAlign.center,
-          ),
           const SizedBox(height: 30),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Retour"),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecuPage(
+                    titre: "Déclaration de vol ($_objetVole)",
+                    date: DateFormat('dd/MM/yyyy').format(DateTime.now()),
+                    poste: "Poste Central",
+                  ),
+                ),
+              );
+            },
+            child: const Text("Voir mon reçu"),
           ),
         ],
       ),

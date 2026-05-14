@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:idara_plus/features/police/screens/recu_page.dart';
 
 class CreationPassportPage extends StatefulWidget {
   const CreationPassportPage({super.key});
@@ -30,10 +32,13 @@ class _CreationPassportPageState extends State<CreationPassportPage> {
     if (_currentStep < 2) {
       setState(() => _currentStep++);
     } else {
-      // Sauvegarde pour le Suivi
+      // Sauvegarde locale pour le suivi
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('passport_status', 0); // 0 = Envoyé
-      await prefs.setString('passport_date', "13/05/2026");
+      await prefs.setString(
+        'passport_date',
+        DateFormat('dd/MM/yyyy').format(DateTime.now()),
+      );
 
       setState(() => _isSubmitted = true);
     }
@@ -111,10 +116,21 @@ class _CreationPassportPageState extends State<CreationPassportPage> {
             "Demande de passeport envoyée !",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Retour à l'accueil"),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecuPage(
+                    titre: "Demande Passeport ($_type)",
+                    date: DateFormat('dd/MM/yyyy').format(DateTime.now()),
+                    poste: "Poste Central",
+                  ),
+                ),
+              );
+            },
+            child: const Text("Voir mon reçu"),
           ),
         ],
       ),

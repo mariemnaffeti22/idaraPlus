@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:idara_plus/features/police/screens/recu_page.dart';
 
 class DeclarationPertePage extends StatefulWidget {
   const DeclarationPertePage({super.key});
@@ -20,9 +21,13 @@ class _DeclarationPertePageState extends State<DeclarationPertePage> {
 
   Future<void> _submitDeclaration() async {
     final prefs = await SharedPreferences.getInstance();
-    // Sauvegarde pour le suivi (statut 0 = Reçu)
-    await prefs.setInt('perte_status', 0);
+    // Sauvegarde pour le suivi
+    await prefs.setInt('perte_status', 0); // 0 = Reçu
     await prefs.setString('perte_objet', _objetPerdu);
+    await prefs.setString(
+      'perte_date',
+      DateFormat('dd/MM/yyyy').format(DateTime.now()),
+    );
 
     setState(() => _isSubmitted = true);
 
@@ -98,30 +103,43 @@ class _DeclarationPertePageState extends State<DeclarationPertePage> {
     );
   }
 
-  Widget _buildSuccessView() => Center(
-    child: Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.description, size: 100, color: Colors.blue),
-          const SizedBox(height: 20),
-          const Text(
-            "Déclaration enregistrée",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            "La perte de votre $_objetPerdu a été enregistrée. Votre reçu numérique est disponible.",
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Retour à l'accueil"),
-          ),
-        ],
+  Widget _buildSuccessView() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.description, size: 100, color: Colors.blue),
+            const SizedBox(height: 20),
+            const Text(
+              "Déclaration enregistrée",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "La perte de votre $_objetPerdu a été enregistrée.",
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecuPage(
+                      titre: "Déclaration de perte ($_objetPerdu)",
+                      date: DateFormat('dd/MM/yyyy').format(DateTime.now()),
+                      poste: "Poste Central",
+                    ),
+                  ),
+                );
+              },
+              child: const Text("Voir mon reçu"),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
