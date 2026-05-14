@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:idara_plus/presentation/chat_ia_page.dart';
 import 'package:idara_plus/presentation/municipalite_form_page.dart'
     show MunicipaliteFormPage;
 import 'package:idara_plus/features/municipalities/screens/extrait_naissance_page.dart';
@@ -119,16 +120,20 @@ class _AdministrationPageState extends State<AdministrationPage> {
         currentIndex: _selectedIndex,
         // LOGIQUE DE NAVIGATION CORRIGÉE
         onTap: (index) {
-          if (index == 1) {
-            // Index 1 correspond à "Suivi"
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SuiviPage()),
-            );
-          } else {
-            setState(() => _selectedIndex = index);
-          }
-        },
+  if (index == 1) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SuiviPage()),
+    );
+  } else if (index == 3) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ChatIAPage()),
+    );
+  } else {
+    setState(() => _selectedIndex = index);
+  }
+},
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
